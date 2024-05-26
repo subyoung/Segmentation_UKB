@@ -1,9 +1,3 @@
-# Segmentation_UKB
-This is the segmentation tool for UKB dataset. Cortical segmentation is mainly based on and modified from **[SynthSeg](https://github.com/BBillot/SynthSeg)** repository and method for subcortical segmentation is still under consideration(05/26/2024). 
-For cortical segmentation, the tool has been modified to apply on UKB dataset and additional resolution conversion, relabeling and leakage correction method are added. Scripts for both integrated version and separated version are both included in this repository.
-
-
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -33,9 +27,9 @@ For cortical segmentation, the tool has been modified to apply on UKB dataset an
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+## About The Project - Segmentation_UKB
 
-This is the segmentation tool for UKB dataset. Cortical segmentation is mainly based on and modified from **[SynthSeg](https://github.com/BBillot/SynthSeg)** repository while method for subcortical segmentation is still under consideration(05/26/2024). SynthSeg the first deep learning tool for segmentation of brain scans of any contrast and resolution and details can found in **[SynthSeg](https://github.com/BBillot/SynthSeg)** repository and their publication below.
+This is the segmentation tool for UKB dataset. Cortical segmentation is mainly based on and modified from **[SynthSeg](https://github.com/BBillot/SynthSeg)** repository while method for subcortical segmentation is still under consideration(05/26/2024). SynthSeg the first deep learning tool for segmentation of brain scans of any contrast and resolution and details can found in **[SynthSeg](https://github.com/BBillot/SynthSeg)** repository and their publication below.\
 **Robust machine learning segmentation for large-scale analysisof heterogeneous clinical brain MRI datasets** \
 B. Billot, M. Colin, Y. Cheng, S.E. Arnold, S. Das, J.E. Iglesias \
 PNAS (2023) \
