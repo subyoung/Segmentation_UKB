@@ -37,6 +37,7 @@ PNAS (2023) \
 [ [article](https://www.pnas.org/doi/full/10.1073/pnas.2216399120#bibliography) | [arxiv](https://arxiv.org/abs/2203.01969) | [bibtex](bibtex.bib) ]
 
 * For cortical segmentation, the Synthseg tool has been modified to apply on UKB dataset and additional resolution conversion, relabeling and leakage correction method are added. Scripts for both integrated version and separated version are both included in this repository.
+* For subcortical segmentation...
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
