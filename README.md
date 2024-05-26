@@ -24,7 +24,7 @@
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project - Segmentation_UKB
+# About The Project - Segmentation_UKB
 
 This is the segmentation tool for UKB dataset. Cortical segmentation is mainly based on and modified from **[SynthSeg](https://github.com/BBillot/SynthSeg)** repository while method for subcortical segmentation is still under consideration(05/26/2024). SynthSeg the first deep learning tool for segmentation of brain scans of any contrast and resolution and details can found in **[SynthSeg](https://github.com/BBillot/SynthSeg)** repository and their publication below.
 
@@ -33,14 +33,17 @@ B. Billot, M. Colin, Y. Cheng, S.E. Arnold, S. Das, J.E. Iglesias \
 PNAS (2023) \
 [ [article](https://www.pnas.org/doi/full/10.1073/pnas.2216399120#bibliography) | [arxiv](https://arxiv.org/abs/2203.01969) | [bibtex](bibtex.bib) ]
 
-* For cortical segmentation, the Synthseg tool has been modified to apply on UKB dataset and additional resolution conversion, relabeling and leakage correction method are added. Scripts for both integrated version and separated version are both included in this repository.
-* For subcortical segmentation...
+
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- CORTICAL SEGMENTATION -->
+# Cortical Segmentation
 
-
+* For cortical segmentation, the Synthseg tool has been modified to apply on UKB dataset and additional resolution conversion, relabeling and leakage correction method are added. Scripts for both integrated version and separated version are both included in this repository.
+  
 <!-- GETTING STARTED -->
 ## Getting Started
 
@@ -105,32 +108,6 @@ See the [open issues](https://github.com/othneildrew/Best-README-Template/issues
 
 
 
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTACT -->
 ## Contact
@@ -159,7 +136,9 @@ Use this space to list resources you find helpful and would like to give credit 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
+<!-- SUBCORTICAL SEGMENTATION -->
+# Subcortical Segmentation
+* For subcortical segmentation...
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
