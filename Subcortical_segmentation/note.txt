@@ -1,0 +1,1 @@
+The method for subcortical segmentation still need to be further developed.
