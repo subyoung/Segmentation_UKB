@@ -51,19 +51,23 @@ To use the tool on Jhpce server, make sure you have the Jhpce account and have t
 
 ### Installation
 
-_Below is the instruction how you can set up the environment and install the tool in Jhpce server._
+_Below is the instruction how you can set up the environment and install the tool in Jhpce server. The instruction is based on integrated version_
 
-1. Clone the repo
+1. Clone the repo 
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/subyoung/Segmentation_UKB.git
    ```
-2. Install NPM packages
+2. Go to this [onedrve link](https://livejohnshopkins-my.sharepoint.com/:f:/g/personal/zxu105_jh_edu/Eq_ZuJaWex5CqsEUg7sGdakBw7OpAGAmWjCUC-hEhpAyQg?e=Sg8ZCH), and download the missing models. Then simply copy all models in h5 format to [./Cortical_segmentation/Intergrated_version/SynthSeg/models](https://github.com/subyoung/Segmentation_UKB/tree/a6ccbe48bf78b762a3b8d476ce30028e2900ae64/Cortical_segmentation/Intergrated_version/SynthSeg/models). 
+
+3. Upload [the whloe cortical segmentation folder](https://github.com/subyoung/Segmentation_UKB/tree/a6ccbe48bf78b762a3b8d476ce30028e2900ae64/Cortical_segmentation/Intergrated_version) into jhpce server, e.g., using node jhpce-transfer01.jhsph.edu.
+   
+4. Check whether the *conda* module has been activate. Try:
    ```sh
-   npm install
+   conda
    ```
-3. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+   If it returns the instruction of *conda*, you can go to step 5. Otherwise, load *conda* module first:
+    ```sh
+   module load anaconda
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
