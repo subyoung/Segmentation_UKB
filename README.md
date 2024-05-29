@@ -33,8 +33,6 @@ PNAS (2023) \
 
 
 
-
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CORTICAL SEGMENTATION -->
@@ -53,6 +51,7 @@ To use the tool on Jhpce server, make sure you have the Jhpce account and have t
 
 _Below is the instruction how you can set up the environment and install the tool in Jhpce server. The instruction is based on integrated version_
 
+#### Method 1
 1. Clone the repo in your local machine
    ```sh
    git clone https://github.com/subyoung/Segmentation_UKB.git
@@ -72,10 +71,62 @@ _Below is the instruction how you can set up the environment and install the too
    ```sh
    conda
    ```
-   If it returns the instruction of *conda*, you can go to step 5. Otherwise, load *conda* module first:
+   If it returns the instruction of *conda*, you can go to step 6. Otherwise, load *conda* module first:
     ```sh
    module load anaconda
    ```
+6. Using [synthseg_38_environment.yml](https://github.com/subyoung/Segmentation_UKB/blob/3ee006d6577be513c60906926428a531e1a49e45/Cortical_segmentation/Intergrated_version/synthseg_38_environment.yml) to create an environment and download all the packages. \
+   Redirect to the folder with synthseg_38_environment.yml in the command line, for example:
+   ```sh
+   cd /users/zxu/Cortical_segmentation/Intergrated_version
+   ```
+   Create the environment. You can change the environment name by adjusting the first line `name: synthseg_38` of the yml file if you want.
+   ```sh
+   conda env create -f synthseg_38_environment.yml
+   ```
+7. Activate the new environment
+   ```sh
+   #remember to adjust the env name if you changed the name before
+   conda activate synthseg_38
+   ```
+8. If you are using GPU, you can test if tensorflow has been installed correctly. All dynamic libraries should be loaded sucessfully, and the visible GPU devices should be added.
+   ```sh
+   python3 -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
+   ```
+   Otherwise, if you are using CPU, you can test with the tensorflow version. However, using CPU to run tensorflow sucessfully does not grant using GPU successfully. The best way to test is using a GPU session.
+   ```sh
+   python -c "import tensorflow as tf; print(tf.__version__)"
+   ```
+9. (optional) Test with using *--help* command of our script
+    ```sh
+      python /path-to-your-SynthSeg-folder/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --help
+      #e.g., python /users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --help
+    ```
+    It should return the instruction of our script.
+10. Run the script on the testfile using command line or the shell script *run_synthseg_GPU_test.sh*. No matter which way you choose, please adjust the file path as your path of testfile and SynthSeg command. \ 
+    *If using command line:*
+     ```sh
+      python /path-to-your-SynthSeg-folder/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --i /users/zxu/synthseg/test/input --o /users/zxu/synthseg/test/output --parc --vol /users/zxu/synthseg/test/output/volumes.csv --resolutionconversion --keep_intermediate_files --relabel --label_correction --save_brain --save_analyseformat --qc /users/zxu/synthseg/test/output/qc.csv
+     ```
+     *If using shell script:*
+     ```sh
+      #remember cd to the folder of the shell script first or add full path of the script, e.g., /users/zxu/synthseg/run_synthseg_GPU_test.sh
+      #remember to adjust the env name if you used other name instead of synthseg_38
+      #remember to adjust the file path as your path of testfile in the shell script
+      sbatch run_synthseg_GPU_test.sh
+     ```
+11.  If step 10 runs without error, you're now ready to use SynthSeg in Jhpce ! :tada: \
+     Remember to activate your environment every time you need to run the scripts:
+     ```sh
+     conda activate synthseg_38
+     ```
+   
+   
+   
+   
+
+#### Method 2 (Currently the method 2 has some issues with tensorflow, pls use method 1 for now)
+1-5. Same with Method 1. \
 6. Create an environment to install the basic packages.
    ```sh
    # Conda, Python 3.8:
@@ -116,37 +167,25 @@ _Below is the instruction how you can set up the environment and install the too
     2.2.0
    ```
 10. Redirect to the SynthSeg folder with setup.py in the command line, e.g., if the folder is */users/zxu/Intergrated_version/SynthSeg*
-   ```sh
-   cd /users/zxu/Intergrated_version/SynthSeg
-   ```
-  Under the *SynthSeg* folder, with and activated environment, further install all the dependencies.
-   ```sh
-   python setup.py install
-   ```
-   After the installation, go back to step 9 to test.
-11. (optional) Test with using *--help* command of our script
-  ```sh
-    python /path-to-your-SynthSeg-folder/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --help
-    #e.g., python /users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --help
-  ```
-  It should return the instruction of our script.
-12. Run the script on the testfile using command line or the shell script *run_synthseg_GPU_test.sh*. No matter which way you choose, please adjust the file path as your path of testfile and SynthSeg command. \ 
-  *If using command line:*
-  ```sh
-    python /users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --i /users/zxu/synthseg/test/input --o /users/zxu/synthseg/test/output --parc --vol /users/zxu/synthseg/test/output/volumes.csv --resolutionconversion --keep_intermediate_files --relabel --label_correction --save_brain --save_analyseformat --qc /users/zxu/synthseg/test/output/qc.csv
-  ```
-   *If using shell script:*
-   ```sh
-    #remember cd to the folder of the shell script first or add full path of the script, e.g., /users/zxu/synthseg/run_synthseg_GPU_test.sh
-    sbatch run_synthseg_GPU_test.sh
-   ```
-13. If step 12 runs without error, you're now ready to use SynthSeg in Jhpce ! :tada: \
-    Remember to activate your environment every time you need to run the scripts:
-    ```sh
-    conda activate synthseg_38
-    ```
+     ```sh
+     cd /users/zxu/Intergrated_version/SynthSeg
+     ```
+    Under the *SynthSeg* folder, with and activated environment, further install all the dependencies.
+     ```sh
+     python setup.py install
+     ```
+     After the installation, go back to step 9 to test.
+11. Test with step 8-10 in Method 1.
+12. If all test runs without error, you're now ready to use SynthSeg in Jhpce ! :tada: \
+     Remember to activate your environment every time you need to run the scripts:
+     ```sh
+     conda activate synthseg_38
+     ```
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 ## Getting Started in local machine
 To be done
@@ -160,7 +199,6 @@ Once all the python packages are installed (see below), you can simply test Synt
 ```
 python ./scripts/commands/SynthSeg_predict_ukb.py --i <input> --o <output> [--parc --robust --ct --vol <vol> --qc <qc> --post <post> --resample <resample>] [--resolutionconversion] [--keep_intermediate_files] [--relabel] [--label_correction] [--save_analyseformat] [--save_brain]
 ```
-
 
 where:
 - `<input>` path to a scan to segment, or to a folder. This can also be the path to a text file, where each line is the
@@ -212,6 +250,34 @@ corresponding values before and after the relabelling. This table also details t
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+
+
+## Other useful commands of JHPCE
+For complete instruction of JHPCE, please refer to [Joint HPC Exchange](https://jhpce.jhu.edu/).
+1. Open a session
+   ```sh
+   #open a gpu session
+   srun --pty --x11 --partition gpu --gpus=1 --mem=20G bash
+   #or a cpu session
+   srun --time=08:00:00 --mem=10G --cpus-per-task=4 --pty bash
+   ```
+2. Check current jobs
+   ```sh
+   squeue --me
+   ```
+3. About environments
+   ```sh
+   #List all environments
+   conda env list
+   #List all packages under the current environment
+   conda list
+   #Delete some environment, e.g.,synthseg_test
+   conda env remove --name synthseg_test
+4. Check cuda version(under GPU session)
+   ```sh
+   nvidia-smi
+   ```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- ROADMAP -->
