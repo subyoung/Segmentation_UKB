@@ -143,7 +143,8 @@ _Below is the instruction how you can set up the environment and install the too
    
    
 
-#### Method 2 (Currently the method 2 has some issues with tensorflow, pls use method 1 for now)
+#### Method 2 
+**(Currently the method 2 has some issues with tensorflow, pls use method 1 for now)**
 1-5. Same with Method 1. \
 6. Create an environment to install the basic packages.
    ```sh
@@ -222,7 +223,7 @@ INPUR_FOLDER/
     ├ *_mask.nii.gz  
 ```
 
-### Try it in one command !
+### Try it in one command
 
 Once all the python packages are installed (see above), you can simply test SynthSeg on your own data with:
 ```
@@ -280,7 +281,7 @@ corresponding values before and after the relabelling. This table also details t
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Try it using sbatch !
+### Try it using sbatch
 
 The best way to run this tool on JHPCE is using sbatch and shell script `sbatch run_synthseg_GPU.sh`. The example shell script using [CPU](https://github.com/subyoung/Segmentation_UKB/blob/0afd10766aa506c7da59f02b121098bc193c89b1/Cortical_segmentation/Intergrated_version/run_synthseg_CPU.sh) and [GPU](https://github.com/subyoung/Segmentation_UKB/blob/0afd10766aa506c7da59f02b121098bc193c89b1/Cortical_segmentation/Intergrated_version/run_synthseg_GPU.sh) has been provided. 
 ```sh
