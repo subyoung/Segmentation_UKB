@@ -6,18 +6,35 @@
       <a href="#about-the-project">About The Project</a>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#cortical-segmentation">Cortical Segmentation</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#getting-started-in-jhpce-server">Getting Started in JHPCE server</a>
+          <ul>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#method-1">Method 1</a></li>
+            <li><a href="#method-2">Method 2</a></li>
+          </ul>
+        </li>
+        <li><a href="#getting-started-in-local-machine">Getting Started in Local Machine</a></li>
+        <li><a href="#usage">Usage</a>
+          <ul>
+            <li><a href="#try-it-in-one-command">Try it in one command</a></li>
+            <li><a href="#try-it-using-sbatch">Try it using sbatch</a></li>
+            <li><a href="#for-ukb-dataset">For UKB dataset</a></li>
+          </ul>
+        </li>
+        <li><a href="#other-useful-commands-of-jhpce">Other useful commands of JHPCE</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#acknowledgments">Acknowledgments</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#subcortical-segmentation">Subcortical Segmentation</a></li>
   </ol>
 </details>
+
+
 
 
 
@@ -43,10 +60,12 @@ PNAS (2023) \
 <!-- GETTING STARTED -->
 ## Getting Started in Jhpce server
 
+<!-- PREREQUISTIES -->
 ### Prerequisites
 
 To use the tool on Jhpce server, make sure you have the Jhpce account and have the access to the data. 
 
+<!-- INSTALLATION -->
 ### Installation
 
 _Below is the instruction how you can set up the environment and install the tool in Jhpce server. The instruction is based on integrated version_
@@ -120,8 +139,7 @@ _Below is the instruction how you can set up the environment and install the too
      ```sh
      conda activate synthseg_38
      ```
-   
-   
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
    
    
 
