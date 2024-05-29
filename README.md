@@ -212,6 +212,7 @@ _Below is the instruction how you can set up the environment and install the too
 
 ## Getting Started in local machine
 To be done
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
