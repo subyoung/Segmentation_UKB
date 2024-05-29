@@ -140,7 +140,11 @@ _Below is the instruction how you can set up the environment and install the too
     #remember cd to the folder of the shell script first or add full path of the script, e.g., /users/zxu/synthseg/run_synthseg_GPU_test.sh
     sbatch run_synthseg_GPU_test.sh
    ```
-13. If step 12 runs without error, you're now ready to use SynthSeg in Jhpce ! :tada:
+13. If step 12 runs without error, you're now ready to use SynthSeg in Jhpce ! :tada: \
+    Remember to activate your environment every time you need to run the scripts:
+    ```sh
+    conda activate synthseg_38
+    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
