@@ -148,8 +148,8 @@ _Below is the instruction how you can set up the environment and install the too
    
 
 #### Method 2 
-**(Currently the method 2 has some issues with tensorflow, pls use method 1 for now)**
-1-5. Same with Method 1. \
+**(Currently the method 2 has some issues with tensorflow, pls use method 1 for now)** \
+1-5. Same with Method 1.  \
 6. Create an environment to install the basic packages.
    ```sh
    # Conda, Python 3.8:
