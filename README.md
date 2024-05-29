@@ -67,12 +67,12 @@ PNAS (2023) \
 <!-- PREREQUISTIES -->
 ### Prerequisites
 
-To use the tool on Jhpce server, make sure you have the Jhpce account and have the access to the data. 
+To use the tool on JHPCE server, make sure you have the JHPCE account and have the access to the data. 
 
 <!-- INSTALLATION -->
 ### Installation
 
-_Below is the instruction how you can set up the environment and install the tool in Jhpce server. The instruction is based on integrated version_
+_Below is the instruction how you can set up the environment and install the tool in JHPCE server. The instruction is based on integrated version_
 
 #### Method 1
 1. Clone the repo in your local machine
@@ -81,7 +81,7 @@ _Below is the instruction how you can set up the environment and install the too
    ```
 2. Go to this [onedrve link](https://livejohnshopkins-my.sharepoint.com/:f:/g/personal/zxu105_jh_edu/Eq_ZuJaWex5CqsEUg7sGdakBw7OpAGAmWjCUC-hEhpAyQg?e=Sg8ZCH), and download the missing models. Then simply copy all models in h5 format to [./Cortical_segmentation/Intergrated_version/SynthSeg/models](https://github.com/subyoung/Segmentation_UKB/tree/a6ccbe48bf78b762a3b8d476ce30028e2900ae64/Cortical_segmentation/Intergrated_version/SynthSeg/models). 
 
-3. Upload [the whloe cortical segmentation folder](https://github.com/subyoung/Segmentation_UKB/tree/a6ccbe48bf78b762a3b8d476ce30028e2900ae64/Cortical_segmentation/Intergrated_version) into jhpce server, e.g., using node jhpce-transfer01.jhsph.edu. Recommand using transfer01 node to upload/download for faster speed. See [Jhpce File-transfer Instruction](https://jhpce.jhu.edu/access/file-transfer/) for the instruction.
+3. Upload [the whloe cortical segmentation folder](https://github.com/subyoung/Segmentation_UKB/tree/a6ccbe48bf78b762a3b8d476ce30028e2900ae64/Cortical_segmentation/Intergrated_version) into JHPCE server, e.g., using node jhpce-transfer01.jhsph.edu. Recommand using transfer01 node to upload/download for faster speed. See [JHPCE File-transfer Instruction](https://jhpce.jhu.edu/access/file-transfer/) for the instruction.
    
 4. Open a cpu session or gpu session for the setup can be done sucessfully.
    ```sh
@@ -138,7 +138,7 @@ _Below is the instruction how you can set up the environment and install the too
       #remember to adjust the file path as your path of testfile in the shell script
       sbatch run_synthseg_GPU_test.sh
      ```
-11.  If step 10 runs without error, you're now ready to use SynthSeg in Jhpce ! :tada: \
+11.  If step 10 runs without error, you're now ready to use SynthSeg in JHPCE ! :tada: \
      Remember to activate your environment every time you need to run the scripts:
      ```sh
      conda activate synthseg_38
@@ -199,7 +199,7 @@ _Below is the instruction how you can set up the environment and install the too
      ```
      After the installation, go back to step 9 to test.
 11. Test with step 8-10 in Method 1.
-12. If all test runs without error, you're now ready to use SynthSeg in Jhpce ! :tada: \
+12. If all test runs without error, you're now ready to use SynthSeg in JHPCE ! :tada: \
      Remember to activate your environment every time you need to run the scripts:
      ```sh
      conda activate synthseg_38
@@ -393,7 +393,7 @@ Ziyang Xu - zxu105@jh.edu
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Getting Started in Jhpce server
+## Getting Started in JHPCE server
 ### Prerequisites
 ### Installation
 ## Usage
