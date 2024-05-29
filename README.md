@@ -240,10 +240,11 @@ This doesn't apply when the --robust flag is used.
 - `--v1`: (optional) to run the first version of SynthSeg (SynthSeg 1.0, updated 29/06/2022).
 
 
-**IMPORTANT:** SynthSeg always give results at 1mm isotropic resolution, regardless of the input. However, this can 
+**IMPORTANT 1:** SynthSeg always give results at 1mm isotropic resolution, regardless of the input. However, this can 
 cause some viewers to not correctly overlay segmentations on their corresponding images. In this case, you can use the
 `--resample` flag to obtain a resampled image that lives in the same space as the segmentation, such that they can be 
-visualised together with any viewer. For UKB dataset, the intergrated correction flags can be used to get results in original resolution.
+visualised together with any viewer. 
+**IMPORTANT 1:** For UKB dataset, the intergrated correction flags can be used to get results in original resolution.
 
 The complete list of segmented structures is available in [ROI label.xlsx](https://github.com/subyoung/Segmentation_UKB/blob/a6ccbe48bf78b762a3b8d476ce30028e2900ae64/Cortical_segmentation/ROI%20label.xlsx) along with their
 corresponding values before and after the relabelling. This table also details the order in which the posteriors maps are sorted.
