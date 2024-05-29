@@ -192,10 +192,21 @@ To be done
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+**IMPORTANT:** For current version of this tool, all input files needed to be under one folder for batch processing.
+```
+INPUR_FOLDER/
+  ├ A.nii.gz
+  ├ B.nii.gz
+  ├ *.nii.gz
+  ├ /mask
+    ├ A_mask.nii.gz
+    ├ B_mask.nii.gz
+    ├ *_mask.nii.gz  
+```
 
 ### Try it in one command !
 
-Once all the python packages are installed (see below), you can simply test SynthSeg on your own data with:
+Once all the python packages are installed (see above), you can simply test SynthSeg on your own data with:
 ```
 python ./scripts/commands/SynthSeg_predict_ukb.py --i <input> --o <output> [--parc --robust --ct --vol <vol> --qc <qc> --post <post> --resample <resample>] [--resolutionconversion] [--keep_intermediate_files] [--relabel] [--label_correction] [--save_analyseformat] [--save_brain]
 ```
@@ -243,15 +254,56 @@ This doesn't apply when the --robust flag is used.
 **IMPORTANT 1:** SynthSeg always give results at 1mm isotropic resolution, regardless of the input. However, this can 
 cause some viewers to not correctly overlay segmentations on their corresponding images. In this case, you can use the
 `--resample` flag to obtain a resampled image that lives in the same space as the segmentation, such that they can be 
-visualised together with any viewer. 
-**IMPORTANT 1:** For UKB dataset, the intergrated correction flags can be used to get results in original resolution.
+visualised together with any viewer. \
+**IMPORTANT 2:** For UKB dataset, the intergrated correction flags can be used to get results in original resolution.
 
 The complete list of segmented structures is available in [ROI label.xlsx](https://github.com/subyoung/Segmentation_UKB/blob/a6ccbe48bf78b762a3b8d476ce30028e2900ae64/Cortical_segmentation/ROI%20label.xlsx) along with their
 corresponding values before and after the relabelling. This table also details the order in which the posteriors maps are sorted.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Try it using sbatch !
 
+The best way to run this tool on JHPCE is using sbatch and shell script `sbatch run_synthseg_GPU.sh`. The example shell script using [CPU](https://github.com/subyoung/Segmentation_UKB/blob/0afd10766aa506c7da59f02b121098bc193c89b1/Cortical_segmentation/Intergrated_version/run_synthseg_CPU.sh) and [GPU](https://github.com/subyoung/Segmentation_UKB/blob/0afd10766aa506c7da59f02b121098bc193c89b1/Cortical_segmentation/Intergrated_version/run_synthseg_GPU.sh) has been provided. 
+```sh
+#!/bin/bash
+
+#SBATCH --job-name=synthseg_gpu
+#SBATCH --partition=gpu
+#SBATCH --gres=gpu:1
+#SBATCH --time=02:00:00  # Adjusted job time, if needed
+#SBATCH --ntasks=1  # Number of tasks
+#SBATCH --mem=20G  # Adjusted memory requirement
+
+
+# Load the Anaconda module
+#module load anaconda
+
+ENV_NAME="synthseg_38"
+# Activate the environment
+source activate ${ENV_NAME}
+
+# Run your Python script
+echo "Environment setup complete. Ready to run scripts."
+echo "Running script..."
+
+#adjust the path as you need
+python /users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --i /users/zxu/synthseg/input --o /users/zxu/synthseg/output_GPU --parc --vol /users/zxu/synthseg/output_GPU/volumes.csv --resolutionconversion --keep_intermediate_files --relabel --label_correction --save_brain --save_analyseformat --qc /users/zxu/synthseg/output_GPU/qc.csv 
+```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### For UKB dataset 
+The current pipeline:
+![1716975131352](https://github.com/subyoung/Segmentation_UKB/assets/51379801/e1f6076b-fe22-4802-87d3-c9f513ceaf00)
+
+Therefore, we need to set at least `---parc --robust --resolutionconversion --relabel --label_correction` as True. \
+`--cpu --threads 30` can be set true if you want to use CPU instead of GPU, and you can adjust the threads. \
+`--keep_intermediate_files --save_analyseformat --save_brain``--keep_intermediate_files --save_analyseformat --save_brain` are optional, depending on whether you want the intermediate files and saving the final results in analyse format.
+![1716975199877](https://github.com/subyoung/Segmentation_UKB/assets/51379801/66423256-480b-468b-97ab-34d199f1c390)
+
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Other useful commands of JHPCE
 For complete instruction of JHPCE, please refer to [Joint HPC Exchange](https://jhpce.jhu.edu/).
