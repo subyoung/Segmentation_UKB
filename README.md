@@ -62,7 +62,7 @@ PNAS (2023) \
 
   
 <!-- GETTING STARTED -->
-## Getting Started in Jhpce server
+## Getting Started in JHPCE server
 
 <!-- PREREQUISTIES -->
 ### Prerequisites
