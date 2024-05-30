@@ -126,7 +126,7 @@ _Below is the instruction how you can set up the environment and install the too
       #e.g., python /users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --help
     ```
     It should return the instruction of our script.
-10. Run the script on the testfile using command line or the shell script *run_synthseg_GPU_test.sh*. No matter which way you choose, please adjust the file path as your path of testfile and SynthSeg command.  \ 
+10. Run the script on the testfile using command line or the shell script *run_synthseg_GPU_test.sh*. No matter which way you choose, please adjust the file path as your path of testfile and SynthSeg command.\ 
     *If using command line:*
      ```sh
       python /path-to-your-SynthSeg-folder/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --i /users/zxu/synthseg/test/input --o /users/zxu/synthseg/test/output --parc --vol /users/zxu/synthseg/test/output/volumes.csv --resolutionconversion --keep_intermediate_files --relabel --label_correction --save_brain --save_analyseformat --qc /users/zxu/synthseg/test/output/qc.csv
