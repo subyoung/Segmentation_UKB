@@ -211,7 +211,8 @@ def predict(path_images,
                     img_1mm = nib.Nifti1Image(cropped_orig_data, affine=new_aff)
                     #check if there is a folder named '1mmIntp' in the input folder
                     if not os.path.exists(os.path.join(inputfolder, '1mmIntp')):
-                        os.makedirs(os.path.join(inputfolder, '1mmIntp'))
+                        if keep_intermediate_files:
+                            os.makedirs(os.path.join(inputfolder, '1mmIntp'))
                     img_1mm_path = os.path.join(inputfolder, '1mmIntp', os.path.basename(path_images[i]).split('/')[-1].split('.')[0] + '_1mmIntp.nii')
                     # img_1mm_path = path_images[i].split('.')[0] + '_1mmIntp.nii'
                     if keep_intermediate_files:
@@ -225,11 +226,12 @@ def predict(path_images,
 
 
                 # preprocessing
-                image, aff, h, im_res, shape, pad_idx, crop_idx = preprocess(path_image=path_images[i] if not resolutionconversion else img_1mm_path,
+                image, aff, h, im_res, shape, pad_idx, crop_idx = preprocess(path_image=path_images[i] if not resolutionconversion else img_1mm,
                                                                              ct=ct,
                                                                              crop=cropping,
                                                                              min_pad=min_pad,
-                                                                             path_resample=path_resampled[i])
+                                                                             path_resample=path_resampled[i],
+                                                                             resolutionconversion=resolutionconversion)
 
                 # prediction
                 shape_input = utils.add_axis(np.array(image.shape[1:-1]))
@@ -590,10 +592,20 @@ def prepare_output_files(path_images, out_seg, out_posteriors, out_resampled, ou
            out_qc, unique_qc_file, recompute_list
 
 
-def preprocess(path_image, ct, target_res=1., n_levels=5, crop=None, min_pad=None, path_resample=None):
+def preprocess(path_image, ct, target_res=1., n_levels=5, crop=None, min_pad=None, path_resample=None, resolutionconversion=False):
 
     # read image and corresponding info
-    im, _, aff, n_dims, n_channels, h, im_res = utils.get_volume_info(path_image, True)
+    if resolutionconversion == False:
+        im, _, aff, n_dims, n_channels, h, im_res = utils.get_volume_info(path_image, True)
+    else:
+        #path_image is the img itself, not the path
+        im = path_image.get_fdata()
+        aff = path_image.affine
+        n_dims = len(im.shape)
+        n_channels = 1
+        h = path_image.header
+        im_res = np.array(path_image.header.get_zooms()[:3])
+
     if n_dims == 2 and 1 < n_channels < 4:
         raise Exception('either the input is 2D with several channels, or is 3D with at most 3 slices. '
                         'Either way, results are going to be poor...')
