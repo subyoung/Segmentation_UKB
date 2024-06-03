@@ -189,9 +189,10 @@ predict(path_images=args['i'],
         relabel=args['relabel'],
         label_correction=args['label_correction'],
         save_analyseformat=args['save_analyseformat'],
-        save_brain=args['save_brain'])
+        save_brain=args['save_brain'],
+        start_time=start_time)
 
-endtime = time.time()
-print('\nTotal processing time: ' + str(endtime - start_time) + 's')
+# endtime = time.time()
+# print('\nTotal processing time: ' + str(endtime - start_time) + 's')
 
 
