@@ -27,8 +27,8 @@ model_dir = os.path.join(synthseg_home, 'models')
 labels_dir = os.path.join(synthseg_home, 'data/labels_classes_priors')
 from SynthSeg.predict_synthseg_ukb import predict
 
-import time
-start_time = time.time()
+import datetime
+start_time = datetime.datetime.now()
 
 # parse arguments
 parser = ArgumentParser(description="SynthSeg", epilog='\n')

@@ -183,7 +183,7 @@ def predict(path_images,
     list_errors = list()
     for i in range(len(path_images)):
         if i == 0:
-            start_time = datetime.datetime.now()
+            processing_start_time = datetime.datetime.now()
         if verbose:
             loop_info.update(i)
 
@@ -425,22 +425,24 @@ def predict(path_images,
         print('SynthSeg: domain randomisation for segmentation of brain MRI scans of any contrast and resolution')
         print('B. Billot, D.N. Greve, O. Puonti, A. Thielscher, K. Van Leemput, B. Fischl, A.V. Dalca, J.E. Iglesias')
 
+    loading_time = processing_start_time - start_time
+    print('\n\nTime used for loading: %s hours, %s minutes, %s seconds' % (loading_time.seconds // 3600, (loading_time.seconds // 60) % 60, loading_time.seconds % 60))
     #calculate the time used
     end_time = datetime.datetime.now()
-    time_used = end_time - start_time
+    time_used = end_time - processing_start_time
     # calculate the time used in hours, minutes and seconds
     hours, remainder = divmod(time_used.seconds, 3600)
     minutes, seconds = divmod(remainder, 60)
     num_images_processed = len(path_images) - len(list_errors)
     if num_images_processed == 0:
-        print('\n\nNo image processed')
+        print('No image processed')
     else:
         #calculate the time used per image
         time_per_image = time_used / num_images_processed
         # calculate the time used per image in hours, minutes and seconds
         hours_per_image, remainder_per_image = divmod(time_per_image.seconds, 3600)
         minutes_per_image, seconds_per_image = divmod(remainder_per_image, 60)
-        print('\n\nTime used per image: %s hours, %s minutes, %s seconds' % (hours_per_image, minutes_per_image, seconds_per_image))
+        print('Time used per image: %s hours, %s minutes, %s seconds' % (hours_per_image, minutes_per_image, seconds_per_image))
     print('Time used: %s hours, %s minutes, %s seconds in total for %s images' % (hours, minutes, seconds, num_images_processed))
     
 

@@ -81,7 +81,9 @@ def predict(path_images,
             relabel=False,
             label_correction=False,
             save_analyseformat=False,
-            save_brain=False):
+            save_brain=False,
+            
+            start_time=None):
     
     # check additional inputs by Ziyang
     # keep_intermediate_files = True only if resolutionconversion is True
@@ -180,6 +182,8 @@ def predict(path_images,
         loop_info = utils.LoopInfo(len(path_images), 10, 'predicting', True)
     list_errors = list()
     for i in range(len(path_images)):
+        if i == 0:
+            start_time = datetime.datetime.now()
         if verbose:
             loop_info.update(i)
 
@@ -420,6 +424,25 @@ def predict(path_images,
         print('\nIf you use this tool in a publication, please cite:')
         print('SynthSeg: domain randomisation for segmentation of brain MRI scans of any contrast and resolution')
         print('B. Billot, D.N. Greve, O. Puonti, A. Thielscher, K. Van Leemput, B. Fischl, A.V. Dalca, J.E. Iglesias')
+
+    #calculate the time used
+    end_time = datetime.datetime.now()
+    time_used = end_time - start_time
+    # calculate the time used in hours, minutes and seconds
+    hours, remainder = divmod(time_used.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    num_images_processed = len(path_images) - len(list_errors)
+    if num_images_processed == 0:
+        print('\n\nNo image processed')
+    else:
+        #calculate the time used per image
+        time_per_image = time_used / num_images_processed
+        # calculate the time used per image in hours, minutes and seconds
+        hours_per_image, remainder_per_image = divmod(time_per_image.seconds, 3600)
+        minutes_per_image, seconds_per_image = divmod(remainder_per_image, 60)
+        print('\n\nTime used per image: %s hours, %s minutes, %s seconds' % (hours_per_image, minutes_per_image, seconds_per_image))
+    print('Time used: %s hours, %s minutes, %s seconds in total for %s images' % (hours, minutes, seconds, num_images_processed))
+    
 
     if len(list_errors) > 0:
         print('\nERROR: some problems occurred for the following inputs (see corresponding errors above):')
