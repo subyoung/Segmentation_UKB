@@ -312,7 +312,7 @@ echo "Environment setup complete. Ready to run scripts."
 echo "Running script..."
 
 #adjust the path as you need
-python /users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --i /users/zxu/synthseg/input --o /users/zxu/synthseg/output_GPU --parc --vol /users/zxu/synthseg/output_GPU/volumes.csv --resolutionconversion --keep_intermediate_files --relabel --label_correction --save_brain --save_analyseformat --qc /users/zxu/synthseg/output_GPU/qc.csv 
+python /users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --i /users/zxu/synthseg/input --o /users/zxu/synthseg/output_GPU --parc --robust --vol /users/zxu/synthseg/output_GPU/volumes.csv --resolutionconversion --keep_intermediate_files --relabel --label_correction --save_brain --save_analyseformat --qc /users/zxu/synthseg/output_GPU/qc.csv 
 ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
