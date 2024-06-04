@@ -85,19 +85,35 @@ def predict(path_images,
             
             start_time=None):
     
+    basename_input = os.path.basename(path_images)
+    basename_output = os.path.basename(path_segmentations)
+    # path_images is a text file
+    if basename_input[-4:] == '.txt':
+        flag_txt_input = True #flag to indicate that path_images is a text file
+        # if exsit path_volume
+        if path_volumes is not None:
+            if os.path.basename(path_volumes)[-4:] != '.txt':
+                path_volumes = None #ukb project only: path_volumes is not needed when path_images is a text file and path_volumes is not a text file
+        if path_qc_scores is not None:
+            if os.path.basename(path_qc_scores)[-4:] != '.txt':
+                path_qc_scores = None #ukb project only: path_qc_scores is not needed when path_images is a text file and path_qc_scores is not a text file
+    
+    if basename_output[-4:] == '.txt':
+        flag_txt_output = True #flag to indicate that path_segmentations is a text file
+
     # check additional inputs by Ziyang
     # keep_intermediate_files = True only if resolutionconversion is True
     if keep_intermediate_files:
         assert resolutionconversion, 'keep_intermediate_files should be True only if resolutionconversion is True'
     if label_correction:
-        #check if there is a folder named 'mask' in the input folder
-        if not os.path.exists(os.path.join(path_images, 'mask')):
-            raise ValueError('No mask folder found in the input folder')
+        if not flag_txt_input:
+            #check if there is a folder named 'mask' in the input folder
+            if not os.path.exists(os.path.join(path_images, 'mask')):
+                raise ValueError('No mask folder found in the input folder')
     # save_analyseformat = True only if relabel is True
     if save_analyseformat:
         assert relabel, 'save_analyseformat should be True only if relabel is True'
 
-    inputfolder = path_images
 
     # prepare input/output filepaths
     outputs = prepare_output_files(path_images, path_segmentations, path_posteriors, path_resampled,
@@ -194,6 +210,10 @@ def predict(path_images,
                 current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 print('\n\n%s: processing image %s' % (current_time, path_images[i]))
 
+                # the format of path_images is a list of paths, e.g. ['/path/to/T1.nii.gz', '/path/to/T1.nii.gz']
+                inputfolder = path_images[i].split('/')[0:-1] 
+                inputfolder = '/'.join(inputfolder) + '/'
+
                 orig_img = nib.load(path_images[i])
                 orig_data = orig_img.get_fdata()
                 orig_aff = orig_img.affine
@@ -217,7 +237,7 @@ def predict(path_images,
                     if not os.path.exists(os.path.join(inputfolder, '1mmIntp')):
                         if keep_intermediate_files:
                             os.makedirs(os.path.join(inputfolder, '1mmIntp'))
-                    img_1mm_path = os.path.join(inputfolder, '1mmIntp', os.path.basename(path_images[i]).split('/')[-1].split('.')[0] + '_1mmIntp.nii')
+                    img_1mm_path = os.path.join(inputfolder, '1mmIntp', os.path.basename(path_images[i]).split('/')[-1].split('.')[0] + '_1mmIntp.nii') #name example: '/path/to/1mmIntp/100206_2_1mmIntp.nii'
                     # img_1mm_path = path_images[i].split('.')[0] + '_1mmIntp.nii'
                     if keep_intermediate_files:
                         nib.save(img_1mm, img_1mm_path)
@@ -303,7 +323,7 @@ def predict(path_images,
                             seg_orig_res_data = np.flip(seg_orig_res_data, axis=axis)
 
                     # resample to original resolution
-                    seg_orig_res_data = seg_orig_res_data[:orig_shape[0], :orig_shape[1], :orig_shape[2]]
+                    seg_orig_res_data = seg_orig_res_data[:orig_shape[0], :orig_shape[1], :orig_shape[2]]  
                     seg_orig_res_path = path_segmentations[i].split('_synthseg')[0] + '_synthseg_origspace.nii' #name example: 100206_2_synthseg_origspace.nii
                     if keep_intermediate_files:
                         nib.save(nib.Nifti1Image(seg_orig_res_data, orig_aff, orig_img.header), seg_orig_res_path)
@@ -340,35 +360,41 @@ def predict(path_images,
 
                 # correct labels using original mask
                 if label_correction:
-                    #check if there is a folder named 'mask' in the input folder
-                    origmask_folder = os.path.join(inputfolder, 'mask')
-                    origmaskpath = os.path.join(origmask_folder, os.path.basename(path_images[i]).split('.')[0] + '_brain_mask')
-                    #check if there is a mask file starting with the same name as maskpath, no matter the format
-                    origmaskfile = [f for f in os.listdir(origmask_folder) if f.startswith(os.path.basename(origmaskpath))]
-                    if len(origmaskfile) == 0:
-                        raise ValueError('No mask file found in the mask folder')
+                    #check if there is a folder named 'mask' in the input folder  # /users/zxu/ukb_data/visit2_batch0/1000512_2/T1/1000512_2_T1_synthseg.nii.gz
+                    if flag_txt_input:
+                        origmaskpath = os.path.join(inputfolder, 'T1_brain_mask.nii.gz')
+                        if not os.path.exists(origmaskpath):
+                            raise ValueError('No mask file found in the input folder')
                     else:
-                        origmaskpath = os.path.join(origmask_folder, origmaskfile[0])
-                        origmask = nib.load(origmaskpath).get_fdata()
-                        #check the value in the mask
-                        if not np.all(np.isin(np.unique(origmask), [0, 1])): #if the mask is not binary
-                            origmask = np.where(origmask == 0, 0, 1)
-                        #check the shape of the mask
-                        if origmask.shape != seg_for_futureuse.shape:
-                            raise ValueError('The shape of the mask does not match the shape of the segmentation')
+                        origmask_folder = os.path.join(inputfolder, 'mask')
+                        origmaskpath = os.path.join(origmask_folder, os.path.basename(path_images[i]).split('.')[0] + '_brain_mask')
+                        #check if there is a mask file starting with the same name as maskpath, no matter the format
+                        origmaskfile = [f for f in os.listdir(origmask_folder) if f.startswith(os.path.basename(origmaskpath))]
+                        if len(origmaskfile) == 0:
+                            raise ValueError('No mask file found in the mask folder')
                         else:
-                            #only keep labels that are in the mask, but label 15 is always kept, which is the csf when relabel is True; label 24 is the csf when relabel is False
-                            corrected_seg = np.where((origmask == 0) & (seg_for_futureuse != 15), 0, seg_for_futureuse) if relabel else np.where((origmask == 0) & (seg_for_futureuse != 24), 0, seg_for_futureuse)
-                            corrected_seg = corrected_seg.astype(np.uint8)
-                            print('Segmentation corrected using original mask at: %s' % origmaskpath)
-                            corrected_path = segpath_for_futureuse.split('.')[0] + '_corrected.nii'
-                            nib.save(nib.Nifti1Image(corrected_seg, orig_aff, orig_img.header), corrected_path) 
-                            print('Corrected segmentation saved at: %s' % corrected_path)
-                            if save_analyseformat:
-                                # save in analyse format
-                                analyse_path = corrected_path.replace('.nii', '.img')
-                                nib.analyze.save(nib.Nifti1Image(corrected_seg, orig_aff, orig_img.header), analyse_path)
-                                print('Segmentation saved in Analyse Format at: %s' % analyse_path)
+                            origmaskpath = os.path.join(origmask_folder, origmaskfile[0])
+                    
+                    origmask = nib.load(origmaskpath).get_fdata()
+                    #check the value in the mask
+                    if not np.all(np.isin(np.unique(origmask), [0, 1])): #if the mask is not binary
+                        origmask = np.where(origmask == 0, 0, 1)
+                    #check the shape of the mask
+                    if origmask.shape != seg_for_futureuse.shape:
+                        raise ValueError('The shape of the mask does not match the shape of the segmentation')
+                    else:
+                        #only keep labels that are in the mask, but label 15 is always kept, which is the csf when relabel is True; label 24 is the csf when relabel is False
+                        corrected_seg = np.where((origmask == 0) & (seg_for_futureuse != 15), 0, seg_for_futureuse) if relabel else np.where((origmask == 0) & (seg_for_futureuse != 24), 0, seg_for_futureuse)
+                        corrected_seg = corrected_seg.astype(np.uint8)
+                        print('Segmentation corrected using original mask at: %s' % origmaskpath)
+                        corrected_path = segpath_for_futureuse.split('.')[0] + '_corrected.nii'
+                        nib.save(nib.Nifti1Image(corrected_seg, orig_aff, orig_img.header), corrected_path) 
+                        print('Corrected segmentation saved at: %s' % corrected_path)
+                        if save_analyseformat:
+                            # save in analyse format
+                            analyse_path = corrected_path.replace('.nii', '.img')
+                            nib.analyze.save(nib.Nifti1Image(corrected_seg, orig_aff, orig_img.header), analyse_path)
+                            print('Segmentation saved in Analyse Format at: %s' % analyse_path)
                             
 
                 # save brain mask and brain image
