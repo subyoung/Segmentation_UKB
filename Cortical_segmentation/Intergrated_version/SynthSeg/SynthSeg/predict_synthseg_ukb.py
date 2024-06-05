@@ -93,9 +93,11 @@ def predict(path_images,
         # if exsit path_volume
         if path_volumes is not None:
             if os.path.basename(path_volumes)[-4:] != '.txt':
+                path_volumes_copy = path_volumes #ukb project only: save path_volumes to path_volumes_copy just in case we will need it later
                 path_volumes = None #ukb project only: path_volumes is not needed when path_images is a text file and path_volumes is not a text file
         if path_qc_scores is not None:
             if os.path.basename(path_qc_scores)[-4:] != '.txt':
+                path_qc_scores_copy = path_qc_scores #ukb project only: save path_qc_scores to path_qc_scores_copy just in case we will need it later
                 path_qc_scores = None #ukb project only: path_qc_scores is not needed when path_images is a text file and path_qc_scores is not a text file
     
     if basename_output[-4:] == '.txt':
@@ -162,6 +164,13 @@ def predict(path_images,
         labels_qc = utils.get_list_labels(labels_qc)[0][unique_idx]
         if names_qc is not None:
             names_qc = utils.load_array_if_path(names_qc)[unique_idx]
+
+    #check whether all path_qc_scores are the same to prevent overwriting
+    if len(path_qc_scores) > 1:
+        if len(set(path_qc_scores)) == 1:
+            unique_qc_file = True
+        else:
+            unique_qc_file = False
 
     # prepare volume/QC files if necessary
     if unique_vol_file & (path_volumes[0] is not None):
@@ -237,7 +246,7 @@ def predict(path_images,
                     if not os.path.exists(os.path.join(inputfolder, '1mmIntp')):
                         if keep_intermediate_files:
                             os.makedirs(os.path.join(inputfolder, '1mmIntp'))
-                    img_1mm_path = os.path.join(inputfolder, '1mmIntp', os.path.basename(path_images[i]).split('/')[-1].split('.')[0] + '_1mmIntp.nii') #name example: '/path/to/1mmIntp/100206_2_1mmIntp.nii'
+                    img_1mm_path = os.path.join(inputfolder, '1mmIntp', path_images[i].split('/')[-3] + '_' + os.path.basename(path_images[i]).split('/')[-1].split('.')[0] + '_1mmIntp.nii') #name example: '/path/to/1mmIntp/100206_2_T1_1mmIntp.nii'
                     # img_1mm_path = path_images[i].split('.')[0] + '_1mmIntp.nii'
                     if keep_intermediate_files:
                         nib.save(img_1mm, img_1mm_path)
@@ -307,7 +316,11 @@ def predict(path_images,
                 # write QC scores to disc if necessary
                 if path_qc_scores[i] is not None:
                     qc_score = np.around(np.clip(np.squeeze(qc_score)[1:], 0, 1), 4)
-                    row = [os.path.basename(path_images[i]).replace('.nii.gz', '')] + ['%.4f' % q for q in qc_score]
+                    if flag_txt_input:
+                        row = [os.path.basename(path_segmentations[i]).split('/')[-1].split('_synthseg')[0]] + ['%.4f' % q for q in qc_score] #ukb project only: solve the issue if path_images is a text file and the name for the images are the same, all T1.nii.gz
+                    else:
+                        row = [os.path.basename(path_images[i]).replace('.nii.gz', '')] + ['%.4f' % q for q in qc_score]
+                    
                     write_csv(path_qc_scores[i], row, unique_qc_file, labels_qc, names_qc)
 
                 
