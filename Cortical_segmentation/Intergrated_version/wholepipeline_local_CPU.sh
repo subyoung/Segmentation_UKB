@@ -17,11 +17,9 @@ ENV_NAME="synthseg_38"
 source activate ${ENV_NAME}
 
 # Define paths
-path="/users/zxu/ukb_data/visit2_batch1"
+path="/users/zxu/ukb_data/visit2_batch0" #path of the batch
 qc_file="$path/qc.csv"  #the path of qc file
-# testpath="/users/zxu/synthseg/batch_move_test/input2/"
-# maskpath="/users/zxu/synthseg/batch_move_test/input2/mask/"
-
+script_path="/users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py" #the path of SynthSeg command script
 # Flag to determine if filtering by filelabel is needed
 filter_flag=0  # Set to 1 to filter by certain names, 0 to process all
 # List of filelabels to process
@@ -113,7 +111,7 @@ echo ""
 echo "$n files have been located"
 echo "T1 file paths have been written to $input_file_path"
 echo "Output file paths have been written to $output_file_path"
-echo "QC metrics paths have been written to $qc_file"
+echo "QC metrics paths have been written to $qc_file_path"
 
 
 # Run your Python script
@@ -122,7 +120,7 @@ echo "Environment setup complete. Ready to run scripts."
 echo "Running script..."
 
 # remember to change the path as needed
-python /users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --i /users/zxu/ukb_data/input_file_paths.txt --o /users/zxu/ukb_data/output_file_paths.txt --parc --robust --cpu --threads 30 --resolutionconversion --relabel --label_correction --qc /users/zxu/ukb_data/qc_file_paths.txt
+python ${script_path} --i ${input_file_path} --o ${output_file_path} --parc --robust --cpu --threads 30 --resolutionconversion --relabel --label_correction --qc ${qc_file_path}
 
 # Record end time
 end_time=$(date +%s)
