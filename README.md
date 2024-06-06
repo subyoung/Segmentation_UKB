@@ -355,28 +355,26 @@ Below is the example shell script to search for the T1 files and mask files in o
 ```sh
 #!/bin/bash
 
-#SBATCH --job-name=synthseg_wholepipeline_local_CPU
-#SBATCH --time=10:00:00  # Adjusted job time, if needed
+#SBATCH --job-name=synthseg_wholepipeline_local_GPU
+#SBATCH --partition=gpu
+#SBATCH --gres=gpu:1
+#SBATCH --time=04:00:00  # Adjusted job time, if needed
 #SBATCH --ntasks=1  # Number of tasks
-#SBATCH --cpus-per-task=8  # Number of CPU cores per task
-#SBATCH --mem=40G  # Adjusted memory requirement
+#SBATCH --mem=50G  # Adjusted memory requirement, typical usage is 35-40G
 
 #this script allow you to process and save the segmentation on original folder of T1 files 
-#and save the qc metrics of all files in one csv. 
 
 # Record start time
 start_time=$(date +%s)
 
-ENV_NAME="synthseg_38"
+ENV_NAME="synthseg_38" #change your env name as needed
 # Activate the environment
 source activate ${ENV_NAME}
 
 # Define paths
 path="/users/zxu/ukb_data/visit2_batch0" #path of the batch
 qc_file="$path/qc.csv"  #the path of qc file
-# testpath="/users/zxu/synthseg/batch_move_test/input2/"
-# maskpath="/users/zxu/synthseg/batch_move_test/input2/mask/"
-
+script_path="/users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py" #the path of SynthSeg command script
 # Flag to determine if filtering by filelabel is needed
 filter_flag=0  # Set to 1 to filter by certain names, 0 to process all
 # List of filelabels to process
@@ -468,7 +466,7 @@ echo ""
 echo "$n files have been located"
 echo "T1 file paths have been written to $input_file_path"
 echo "Output file paths have been written to $output_file_path"
-echo "QC metrics paths have been written to $qc_file"
+echo "QC metrics paths have been written to $qc_file_path"
 
 
 # Run your Python script
@@ -477,7 +475,7 @@ echo "Environment setup complete. Ready to run scripts."
 echo "Running script..."
 
 # remember to change the path as needed
-python /users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py --i /users/zxu/ukb_data/input_file_paths.txt --o /users/zxu/ukb_data/output_file_paths.txt --parc --robust --cpu --threads 30 --resolutionconversion --relabel --label_correction --qc /users/zxu/ukb_data/qc_file_paths.txt
+python ${script_path} --i ${input_file_path} --o ${output_file_path} --parc --robust --resolutionconversion --relabel --label_correction --qc ${qc_file_path}
 
 # Record end time
 end_time=$(date +%s)
@@ -492,7 +490,6 @@ seconds=$((execution_time % 60))
 echo ""
 # printf "Data moving to intermediate folder execution time: %02d h %02d min %02d s\n" $hours1 $minutes1 $seconds1
 printf "Total execution time: %02d h %02d min %02d s\n" $hours $minutes $seconds
-```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
