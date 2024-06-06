@@ -498,7 +498,8 @@ printf "Total execution time: %02d h %02d min %02d s\n" $hours $minutes $seconds
 
 #### Execution efficiency
 For batch 1, there are 189 cases in total.
-![image](https://github.com/subyoung/Segmentation_UKB/assets/51379801/658a0e18-d30e-4a20-bea3-56a59902e063)
+![image](https://github.com/subyoung/Segmentation_UKB/assets/51379801/ab73df9e-63b5-4e7b-b62c-98c0964706ca)
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
