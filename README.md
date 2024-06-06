@@ -86,9 +86,9 @@ _Below is the instruction how you can set up the environment and install the too
    ```sh
    git clone https://github.com/subyoung/Segmentation_UKB.git
    ```
-2. Go to this [onedrve link](https://livejohnshopkins-my.sharepoint.com/:f:/g/personal/zxu105_jh_edu/Eq_ZuJaWex5CqsEUg7sGdakBw7OpAGAmWjCUC-hEhpAyQg?e=Sg8ZCH), and download the missing models. Then simply copy all models in h5 format to [./Cortical_segmentation/Intergrated_version/SynthSeg/models](https://github.com/subyoung/Segmentation_UKB/tree/a6ccbe48bf78b762a3b8d476ce30028e2900ae64/Cortical_segmentation/Intergrated_version/SynthSeg/models). 
+2. Go to this [onedrve link](https://livejohnshopkins-my.sharepoint.com/:f:/g/personal/zxu105_jh_edu/Eq_ZuJaWex5CqsEUg7sGdakBw7OpAGAmWjCUC-hEhpAyQg?e=Sg8ZCH), and download the missing models. Then simply copy all models in h5 format to [Cortical_segmentation/Intergrated_version/SynthSeg/models](https://github.com/subyoung/Segmentation_UKB/tree/87c02e6e02de794496ff813b0b51f20ad55dcd25/Cortical_segmentation/Intergrated_version/SynthSeg/models). 
 
-3. Upload [the whloe cortical segmentation folder](https://github.com/subyoung/Segmentation_UKB/tree/a6ccbe48bf78b762a3b8d476ce30028e2900ae64/Cortical_segmentation/Intergrated_version) into JHPCE server, e.g., using node jhpce-transfer01.jhsph.edu. Recommand using transfer01 node to upload/download for faster speed. See [JHPCE File-transfer Instruction](https://jhpce.jhu.edu/access/file-transfer/) for the instruction.
+3. Upload [the whloe cortical segmentation folder](https://github.com/subyoung/Segmentation_UKB/tree/87c02e6e02de794496ff813b0b51f20ad55dcd25/Cortical_segmentation/Intergrated_version) into JHPCE server, e.g., using node jhpce-transfer01.jhsph.edu. Recommand using transfer01 node to upload/download for faster speed. See [JHPCE File-transfer Instruction](https://jhpce.jhu.edu/access/file-transfer/) for the instruction.
    
 4. Open a cpu session or gpu session for the setup can be done sucessfully.
    ```sh
@@ -105,7 +105,7 @@ _Below is the instruction how you can set up the environment and install the too
     ```sh
    module load anaconda
    ```
-6. Using [synthseg_38_environment.yml](https://github.com/subyoung/Segmentation_UKB/blob/3ee006d6577be513c60906926428a531e1a49e45/Cortical_segmentation/Intergrated_version/synthseg_38_environment.yml) to create an environment and download all the packages. \
+6. Using [synthseg_38_environment.yml](https://github.com/subyoung/Segmentation_UKB/blob/87c02e6e02de794496ff813b0b51f20ad55dcd25/Cortical_segmentation/Intergrated_version/setup/synthseg_38_environment.yml) to create an environment and download all the packages. \
    Redirect to the folder with synthseg_38_environment.yml in the command line, for example:
    ```sh
    cd /users/zxu/Cortical_segmentation/Intergrated_version
@@ -301,14 +301,14 @@ cause some viewers to not correctly overlay segmentations on their corresponding
 visualised together with any viewer. \
 **IMPORTANT 2:** For UKB dataset, the intergrated correction flags can be used to get results in original resolution.
 
-The complete list of segmented structures is available in [ROI label.xlsx](https://github.com/subyoung/Segmentation_UKB/blob/a6ccbe48bf78b762a3b8d476ce30028e2900ae64/Cortical_segmentation/ROI%20label.xlsx) along with their
+The complete list of segmented structures is available in [ROI label.xlsx](https://github.com/subyoung/Segmentation_UKB/blob/87c02e6e02de794496ff813b0b51f20ad55dcd25/Cortical_segmentation/ROI%20label.xlsx) along with their
 corresponding values before and after the relabelling. This table also details the order in which the posteriors maps are sorted.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Try it using sbatch
 
-The best way to run this tool on JHPCE is using sbatch and shell script `sbatch run_synthseg_GPU.sh`. The example shell script using [CPU](https://github.com/subyoung/Segmentation_UKB/blob/0afd10766aa506c7da59f02b121098bc193c89b1/Cortical_segmentation/Intergrated_version/run_synthseg_CPU.sh) and [GPU](https://github.com/subyoung/Segmentation_UKB/blob/0afd10766aa506c7da59f02b121098bc193c89b1/Cortical_segmentation/Intergrated_version/run_synthseg_GPU.sh) has been provided. 
+The best way to run this tool on JHPCE is using sbatch and shell script `sbatch run_synthseg_GPU.sh`. The example shell script using [CPU](https://github.com/subyoung/Segmentation_UKB/blob/87c02e6e02de794496ff813b0b51f20ad55dcd25/Cortical_segmentation/Intergrated_version/testfile/run_synthseg_CPU.sh) and [GPU](https://github.com/subyoung/Segmentation_UKB/blob/87c02e6e02de794496ff813b0b51f20ad55dcd25/Cortical_segmentation/Intergrated_version/testfile/run_synthseg_GPU.sh) has been provided. 
 ```sh
 #!/bin/bash
 
