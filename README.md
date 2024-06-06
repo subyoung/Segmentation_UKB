@@ -490,6 +490,7 @@ seconds=$((execution_time % 60))
 echo ""
 # printf "Data moving to intermediate folder execution time: %02d h %02d min %02d s\n" $hours1 $minutes1 $seconds1
 printf "Total execution time: %02d h %02d min %02d s\n" $hours $minutes $seconds
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
