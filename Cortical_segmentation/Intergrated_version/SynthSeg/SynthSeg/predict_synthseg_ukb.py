@@ -80,6 +80,7 @@ def predict(path_images,
             keep_intermediate_files=False,
             relabel=False,
             label_correction=False,
+            output_format='nii.gz',
             save_analyseformat=False,
             save_brain=False,
             
@@ -112,6 +113,10 @@ def predict(path_images,
             #check if there is a folder named 'mask' in the input folder
             if not os.path.exists(os.path.join(path_images, 'mask')):
                 raise ValueError('No mask folder found in the input folder')
+    if output_format not in ['nii', 'nii.gz', 'img']:
+        raise ValueError('output_format should be either nii, nii.gz or img')
+    if output_format == 'img': #no need to save in Analyse format if output_format is img
+        assert not save_analyseformat, 'save_analyseformat should be False if output_format is img to avoid overwriting'
     # save_analyseformat = True only if relabel is True
     if save_analyseformat:
         assert relabel, 'save_analyseformat should be True only if relabel is True'
@@ -246,10 +251,13 @@ def predict(path_images,
                     if not os.path.exists(os.path.join(inputfolder, '1mmIntp')):
                         if keep_intermediate_files:
                             os.makedirs(os.path.join(inputfolder, '1mmIntp'))
-                    img_1mm_path = os.path.join(inputfolder, '1mmIntp', path_images[i].split('/')[-3] + '_' + os.path.basename(path_images[i]).split('/')[-1].split('.')[0] + '_1mmIntp.nii') #name example: '/path/to/1mmIntp/100206_2_T1_1mmIntp.nii'
+                    img_1mm_path = os.path.join(inputfolder, '1mmIntp', path_images[i].split('/')[-3] + '_' + os.path.basename(path_images[i]).split('/')[-1].split('.')[0] + '_1mmIntp.'+ output_format) #name example: '/path/to/1mmIntp/100206_2_T1_1mmIntp.nii'
                     # img_1mm_path = path_images[i].split('.')[0] + '_1mmIntp.nii'
                     if keep_intermediate_files:
-                        nib.save(img_1mm, img_1mm_path)
+                        if output_format == 'img':
+                            nib.analyze.save(img_1mm, img_1mm_path)
+                        else:
+                            nib.save(img_1mm, img_1mm_path)
                         
                         print('Original image converted to 1mm isotropic resolution at: %s' % img_1mm_path)
                     
@@ -298,7 +306,7 @@ def predict(path_images,
                 # write predictions to disc depending on configuration
                 if resolutionconversion:
                     if keep_intermediate_files:
-                        seg_1mm_path = path_segmentations[i].split('_synthseg')[0] + '_1mmIntp_synthseg.nii'
+                        seg_1mm_path = path_segmentations[i].split('_synthseg')[0] + '_1mmIntp_synthseg.' + output_format
                         utils.save_volume(seg, aff, h, seg_1mm_path, dtype='int32')
                         if path_posteriors[i] is not None:
                             seg_1mm_posteriors_path = path_posteriors[i].split('_synthseg')[0] + '_1mmIntp_synthseg_posteriors.nii'
@@ -337,9 +345,12 @@ def predict(path_images,
 
                     # resample to original resolution
                     seg_orig_res_data = seg_orig_res_data[:orig_shape[0], :orig_shape[1], :orig_shape[2]]  
-                    seg_orig_res_path = path_segmentations[i].split('_synthseg')[0] + '_synthseg_origspace.nii' #name example: 100206_2_synthseg_origspace.nii
+                    seg_orig_res_path = path_segmentations[i].split('_synthseg')[0] + '_synthseg_origspace.' + output_format #name example: 100206_2_synthseg_origspace.nii
                     if keep_intermediate_files:
-                        nib.save(nib.Nifti1Image(seg_orig_res_data, orig_aff, orig_img.header), seg_orig_res_path)
+                        if output_format == 'img':
+                            nib.analyze.save(nib.Nifti1Image(seg_orig_res_data, orig_aff, orig_img.header), seg_orig_res_path)
+                        else:
+                            nib.save(nib.Nifti1Image(seg_orig_res_data, orig_aff, orig_img.header), seg_orig_res_path)
                         print('Segmentation converted to original resolution at: %s' % seg_orig_res_path)
 
                     seg_for_futureuse = seg_orig_res_data
@@ -351,7 +362,7 @@ def predict(path_images,
 
 
                 if relabel:
-                    mapped_seg, relabeled_path = relabel_img(seg_for_futureuse, orig_aff, orig_img.header, segpath_for_futureuse, save_analyseformat, label_correction, keep_intermediate_files, datatype='uint8')
+                    mapped_seg, relabeled_path = relabel_img(seg_for_futureuse, orig_aff, orig_img.header, segpath_for_futureuse, save_analyseformat, label_correction, keep_intermediate_files, output_format, datatype='uint8')
                     seg_for_futureuse = mapped_seg
                     segpath_for_futureuse = relabeled_path #name example: 100206_2_synthseg_origspace_relabeled98.nii or 100206_2_synthseg_relabeled98.img
 
@@ -400,29 +411,38 @@ def predict(path_images,
                         corrected_seg = np.where((origmask == 0) & (seg_for_futureuse != 15), 0, seg_for_futureuse) if relabel else np.where((origmask == 0) & (seg_for_futureuse != 24), 0, seg_for_futureuse)
                         corrected_seg = corrected_seg.astype(np.uint8)
                         print('Segmentation corrected using original mask at: %s' % origmaskpath)
-                        corrected_path = segpath_for_futureuse.split('.')[0] + '_corrected.nii'
-                        nib.save(nib.Nifti1Image(corrected_seg, orig_aff, orig_img.header), corrected_path) 
+                        corrected_path = segpath_for_futureuse.split('.')[0] + '_corrected.' + output_format
+                        if output_format == 'img':
+                            nib.analyze.save(nib.Nifti1Image(corrected_seg, orig_aff, orig_img.header), corrected_path)
+                        else:
+                            nib.save(nib.Nifti1Image(corrected_seg, orig_aff, orig_img.header), corrected_path) 
                         print('Corrected segmentation saved at: %s' % corrected_path)
                         if save_analyseformat:
                             # save in analyse format
-                            analyse_path = corrected_path.replace('.nii', '.img')
+                            analyse_path = corrected_path.replace('.' + output_format, '.img') #change the format to '.img', e.g. 100206_2_synthseg_origspace_relabeled98_corrected.nii -> 100206_2_synthseg_origspace_relabeled98_corrected.img
                             nib.analyze.save(nib.Nifti1Image(corrected_seg, orig_aff, orig_img.header), analyse_path)
                             print('Segmentation saved in Analyse Format at: %s' % analyse_path)
                             
 
                 # save brain mask and brain image
                 if save_brain:
-                    maskpath = path_segmentations[i].split('_synthseg')[0] + '_synthseg_brainmask.nii'
-                    brainpath = path_segmentations[i].split('_synthseg')[0] + '_synthseg_brain.nii'
+                    maskpath = path_segmentations[i].split('_synthseg')[0] + '_synthseg_brainmask.' + output_format
+                    brainpath = path_segmentations[i].split('_synthseg')[0] + '_synthseg_brain.' + output_format
                     # orig_img = nib.load(path_images[i])
                     # orig_data = orig_img.get_fdata()
                     mask = binary_dilation(seg_for_futureuse > 0, generate_binary_structure(3, 1))
                     masked_brain = orig_data.copy()
                     masked_brain[~mask] = 0
-                    nib.save(nib.Nifti1Image(mask.astype(np.uint8), orig_aff, orig_img.header), maskpath)
-                    print('Brain mask saved at: %s' % maskpath)
-                    nib.save(nib.Nifti1Image(masked_brain, orig_aff, orig_img.header), brainpath)
-                    print('Brain image saved at: %s' % brainpath)
+                    if output_format == 'img':
+                        nib.analyze.save(nib.Nifti1Image(mask.astype(np.uint8), orig_aff, orig_img.header), maskpath)
+                        print('Brain mask saved at: %s' % maskpath)
+                        nib.analyze.save(nib.Nifti1Image(masked_brain, orig_aff, orig_img.header), brainpath)
+                        print('Brain image saved at: %s' % brainpath)
+                    else:
+                        nib.save(nib.Nifti1Image(mask.astype(np.uint8), orig_aff, orig_img.header), maskpath)
+                        print('Brain mask saved at: %s' % maskpath)
+                        nib.save(nib.Nifti1Image(masked_brain, orig_aff, orig_img.header), brainpath)
+                        print('Brain image saved at: %s' % brainpath)
 
             except Exception as e:
                 list_errors.append(path_images[i])
@@ -1061,22 +1081,25 @@ class MakeShape(KL.Layer):
         return x
 
 
-def relabel_img(segmentation, aff, header, path_segmentation, save_analyseformat, label_correction, keep_intermediate_files, datatype = np.uint8):
+def relabel_img(segmentation, aff, header, path_segmentation, save_analyseformat, label_correction, keep_intermediate_files, output_format, datatype = np.uint8):
     unique_labels = np.unique(segmentation)
     label_map = {label: idx for idx, label in enumerate(unique_labels)}
     mapped_segmentations = np.vectorize(label_map.get)(segmentation).astype(np.uint8)
     header.set_data_dtype(datatype)
     if datatype == np.uint8:
-        relabeled_path = path_segmentation.split('.')[0] + '_relabeled98.nii'
+        relabeled_path = path_segmentation.split('.')[0] + '_relabeled98.' + output_format
     else:
-        relabeled_path = path_segmentation.split('.')[0] + '_relabeled.nii'
+        relabeled_path = path_segmentation.split('.')[0] + '_relabeled.' + output_format
     # only if label correction is not needed or intermediate files are kept
     if not label_correction or keep_intermediate_files:
-        nib.save(nib.Nifti1Image(mapped_segmentations, aff, header), relabeled_path)
+        if output_format != 'img':
+            nib.save(nib.Nifti1Image(mapped_segmentations, aff, header), relabeled_path)
+        else:
+            nib.analyze.save(nib.Nifti1Image(mapped_segmentations, aff, header), relabeled_path)
         print('Relabeled segmentation saved at: %s' % relabeled_path)
         if save_analyseformat:
             # save in analyse format
-            analyse_path = relabeled_path.replace('.nii', '.img')
+            analyse_path = relabeled_path.replace('.' + output_format, '.img')
             nib.analyze.save(nib.Nifti1Image(mapped_segmentations, aff, header), analyse_path)
             print('Segmentation saved in Analyse Format at: %s' % analyse_path)
 
