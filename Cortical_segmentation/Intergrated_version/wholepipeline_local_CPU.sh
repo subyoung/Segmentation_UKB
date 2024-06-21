@@ -19,6 +19,7 @@ source activate ${ENV_NAME}
 # Define paths
 path="/users/zxu/ukb_data/visit2_batch0" #path of the batch
 qc_file="$path/qc.csv"  #the path of qc file
+outputformat='nii.gz' #output format
 script_path="/users/zxu/synthseg/SynthSeg/scripts/commands/SynthSeg_predict_ukb.py" #the path of SynthSeg command script
 # Flag to determine if filtering by filelabel is needed
 filter_flag=0  # Set to 1 to filter by certain names, 0 to process all
@@ -120,7 +121,7 @@ echo "Environment setup complete. Ready to run scripts."
 echo "Running script..."
 
 # remember to change the path as needed
-python ${script_path} --i ${input_file_path} --o ${output_file_path} --parc --robust --cpu --threads 30 --resolutionconversion --relabel --label_correction --qc ${qc_file_path}
+python ${script_path} --i ${input_file_path} --o ${output_file_path} --parc --robust --cpu --threads 30 --resolutionconversion --relabel --label_correction --qc ${qc_file_path} --output_format ${outputformat}
 
 # Record end time
 end_time=$(date +%s)
